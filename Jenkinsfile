@@ -63,12 +63,12 @@ pipeline {
             }
         }
 
-	// stage('Ansible Deployment') {
-    //         steps {
-	// 	script {
-    //             ansiblePlaybook credentialsId: 'my_project', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml'
-    //         }
-	//   }
-    //     }
+	stage('Ansible Deployment') {
+            steps {
+		script {
+                ansiblePlaybook credentialsId: 'my_project', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml'
+            }
+	  }
+        }
     }
 }
