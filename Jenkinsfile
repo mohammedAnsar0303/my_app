@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         TAG = "v0.${env.BUILD_NUMBER}"
+        S3_BUCKET = "myproject-artifacts"
     }
     
     stages {
@@ -23,7 +24,7 @@ pipeline {
           AWS_ACCESS_KEY_ID='aws-credentials'
           AWS_SECRET_ACCESS_KEY='aws-credentials'
           AWS_DEFAULT_REGION=ap-south-1
-          aws s3 cp target/*.war s3://myproject-artifacts/
+          aws s3 cp target/*.war s3://${S3_BUCKET}/newapp-${TAG}.war
             '''
       	}
       }
