@@ -15,16 +15,16 @@ pipeline {
             }
         }
 	    
-    // stage('Upload to S3') {
-    //   steps {
-	// sh '''
-    //       AWS_ACCESS_KEY_ID='aws-credentials'
-    //       AWS_SECRET_ACCESS_KEY='aws-credentials'
-    //       AWS_DEFAULT_REGION=us-east-1
-    //       aws s3 cp target/*.war s3://my-project-artifacts-2023/
-    //         '''
-    //   	}
-    //   }
+    stage('Upload to S3') {
+      steps {
+	sh '''
+          AWS_ACCESS_KEY_ID='aws-credentials'
+          AWS_SECRET_ACCESS_KEY='aws-credentials'
+          AWS_DEFAULT_REGION=ap-south-1
+          aws s3 cp target/*.war s3://myproject-artifacts/
+            '''
+      	}
+      }
 	    
 	// stage('SonarQube Analysis') {
     //         steps {
