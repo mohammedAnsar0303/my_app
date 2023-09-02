@@ -64,24 +64,13 @@ pipeline {
             }
         }
 
-// 	stage('Ansible Deployment') {
-//             steps {
-// 		script {
-//                 ansiblePlaybook credentialsId: 'my_project', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml'
-//             }
-// 	  }
-//         }
-//     }
-// }
-        stage('Ansible Deployment') {
+	    stage('Ansible Deployment') {
             steps {
-               script {
-                  ansiblePlaybook credentialsId: 'my_project', disableHostKeyChecking: true, installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml', extraVars: [
-                        's3_bucket': S3_BUCKET,
-                        's3_object_key': "newapp-${TAG}.war"
-                    ]
-                }
+		script {
+                ansiblePlaybook credentialsId: 'my_project', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml'
             }
+	  }
         }
     }
 }
+
