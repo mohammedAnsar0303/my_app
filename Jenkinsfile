@@ -58,11 +58,11 @@ pipeline {
             }
         }
 
-        // stage('Delete Docker Images') {
-        //     steps {
-        //         sh 'docker image prune --all --force'
-        //     }
-        // }
+        stage('Delete Docker Images') {
+            steps {
+                sh 'docker image prune --all --force && docker rm -f myproject'
+            }
+        }
 
         stage (Deployment) {
             steps {
