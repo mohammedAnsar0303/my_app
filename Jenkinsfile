@@ -58,16 +58,17 @@ pipeline {
             }
         }
 
+        stage('Delete Docker Images') {
+            steps {
+                sh 'docker image prune --all --force'
+            }
+        }
+
         stage (Deployment) {
             steps {
                 sh 'docker run -d -p 8091:8080 --name myproject mlogu6/myweb:${TAG}'
             }
         }
-	    // stage('Delete Docker Images') {
-        //     steps {
-        //         sh 'docker image prune --all --force'
-        //     }
-        // }
 
 	//     stage('Ansible Deployment') {
     //         steps {
