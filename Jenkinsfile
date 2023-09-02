@@ -58,7 +58,7 @@ pipeline {
             }
         }
 
-        stage('Delete Docker Images') {
+        stage('Delete Images & Container') {
             steps {
                 sh 'docker image prune --all --force && docker rm -f myproject'
             }
