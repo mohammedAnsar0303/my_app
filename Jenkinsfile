@@ -37,11 +37,11 @@ pipeline {
             }
         }
 
-    //     stage('Build Docker Image') {
-    //         steps {
-    //             sh 'docker build -t mlogu6/myweb:${TAG} .'
-    //         }
-    //     }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t mlogu6/myweb:${TAG} .'
+            }
+        }
 
     //     stage('Docker Image Push') {
     //         steps {
