@@ -1,2 +1,2 @@
 [dev]
-10.1.0.124
+10.1.0.124 ansible_connection=local
