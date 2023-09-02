@@ -60,11 +60,9 @@ pipeline {
 
         stage('Delete Images & Container') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                 sh 'docker image prune --all --force && docker rm -f myproject'
                 }
             }
-        }
 
         stage (Deployment) {
             steps {
