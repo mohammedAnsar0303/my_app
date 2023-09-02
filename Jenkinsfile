@@ -5,6 +5,7 @@ pipeline {
     }
     
     stages {
+        // install maven bianary and add the path in manage jenkins > tools after install the maven plugin 
          stage('Compile-Package') {
             steps {
                 script {
@@ -16,6 +17,7 @@ pipeline {
         }
 	    
     stage('Upload to S3') {
+        // create a iam role and add it to the jenkins server to access the aws
       steps {
 	sh '''
           AWS_ACCESS_KEY_ID='aws-credentials'
@@ -27,6 +29,7 @@ pipeline {
       }
 	    
 	stage('SonarQube Analysis') {
+        // generate a token in sonarqube console and add it in the jenkins credentials
             steps {
                 script {
                     def mvnHome = tool name: 'maven3', type: 'maven'
@@ -39,18 +42,20 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                // install docker in the jenkins server
+                // execute this command to give the permission to build the image "chmod 777 /var/run/docker.sock"
                 sh 'docker build -t mlogu6/myweb:${TAG} .'
             }
         }
 
-    //     stage('Docker Image Push') {
-    //         steps {
-    //             withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
-    //                 sh "docker login -u mlogu6 -p ${dockerPassword}"
-    //             }
-    //             sh 'docker push mlogu6/myweb:${TAG}'
-    //         }
-    //     }
+        stage('Docker Image Push') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
+                    sh "docker login -u mlogu6 -p ${dockerPassword}"
+                }
+                sh 'docker push mlogu6/myweb:${TAG}'
+            }
+        }
 
 	// stage('Delete Docker Images') {
     //         steps {
