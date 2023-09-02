@@ -58,19 +58,24 @@ pipeline {
             }
         }
 
-	    stage('Delete Docker Images') {
+        stage (Deployment) {
             steps {
-                sh 'docker image prune --all --force'
+                sh 'docker run -d -p 8091:8080 --name myproject mlogu6/myweb:${TAG}'
             }
         }
+	    // stage('Delete Docker Images') {
+        //     steps {
+        //         sh 'docker image prune --all --force'
+        //     }
+        // }
 
-	    stage('Ansible Deployment') {
-            steps {
-		script {
-                ansiblePlaybook credentialsId: 'my_project', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml'
-            }
-	  }
-        }
+	//     stage('Ansible Deployment') {
+    //         steps {
+	// 	script {
+    //             ansiblePlaybook credentialsId: 'my_project', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yml'
+    //         }
+	//   }
+    //     }
     }
 }
 
