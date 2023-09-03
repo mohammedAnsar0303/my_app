@@ -58,6 +58,14 @@ pipeline {
             }
         }
 
+        stage('Nexus Image Push') {
+            steps {
+                sh "docker login -u admin -p admin 52.66.210.244:8087"
+                sh "docker tag mlogu6/myweb:${TAG} 52.66.210.244:8087/myproject:1.0.0"
+                sh "docker push 52.66.210.244:8087/myproject:1.0.0"
+            }
+        }
+
         stage('Delete Images & Container') {
             steps {
                 sh 'docker image prune --all --force && docker rm -f myproject'
