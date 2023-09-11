@@ -18,7 +18,7 @@ pipeline {
         }
 	    
     stage('Upload to S3') {
-        // create a iam role and add it to the jenkins server to access the aws-
+        // create a iam role and add it to the jenkins server to access the aws
       steps {
 	sh '''
           AWS_ACCESS_KEY_ID='aws-credentials'
