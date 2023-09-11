@@ -17,66 +17,66 @@ pipeline {
             }
         }
 	    
-    stage('Upload to S3') {
-        // create a iam role and add it to the jenkins server to access the aws
-      steps {
-	sh '''
-          AWS_ACCESS_KEY_ID='aws-credentials'
-          AWS_SECRET_ACCESS_KEY='aws-credentials'
-          AWS_DEFAULT_REGION=ap-south-1
-          aws s3 cp target/*.war s3://${S3_BUCKET}/newapp-${TAG}.war
-            '''
-      	}
-      }
+    // stage('Upload to S3') {
+    //     // create a iam role and add it to the jenkins server to access the aws
+    //   steps {
+	// sh '''
+    //       AWS_ACCESS_KEY_ID='aws-credentials'
+    //       AWS_SECRET_ACCESS_KEY='aws-credentials'
+    //       AWS_DEFAULT_REGION=ap-south-1
+    //       aws s3 cp target/*.war s3://${S3_BUCKET}/newapp-${TAG}.war
+    //         '''
+    //   	}
+    //   }
 	    
-	stage('SonarQube Analysis') {
-        // generate a token in sonarqube console and add it in the jenkins credentials
-            steps {
-                script {
-                    def mvnHome = tool name: 'maven3', type: 'maven'
-                    withSonarQubeEnv('sonar') {
-                        sh "${mvnHome}/bin/mvn sonar:sonar"
-                    }
-                }
-            }
-        }
+	// stage('SonarQube Analysis') {
+    //     // generate a token in sonarqube console and add it in the jenkins credentials
+    //         steps {
+    //             script {
+    //                 def mvnHome = tool name: 'maven3', type: 'maven'
+    //                 withSonarQubeEnv('sonar') {
+    //                     sh "${mvnHome}/bin/mvn sonar:sonar"
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        stage('Build Docker Image') {
-            steps {
-                // install docker in the jenkins server
-                // execute this command to give the permission to build the image "chmod 777 /var/run/docker.sock"
-                sh 'docker build -t mlogu6/myweb:${TAG} .'
-            }
-        }
+    //     stage('Build Docker Image') {
+    //         steps {
+    //             // install docker in the jenkins server
+    //             // execute this command to give the permission to build the image "chmod 777 /var/run/docker.sock"
+    //             sh 'docker build -t mlogu6/myweb:${TAG} .'
+    //         }
+    //     }
 
-        stage('Docker Image Push') {
-            steps {
-                withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
-                    sh "docker login -u mlogu6 -p ${dockerPassword}"
-                }
-                sh 'docker push mlogu6/myweb:${TAG}'
-            }
-        }
+    //     stage('Docker Image Push') {
+    //         steps {
+    //             withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
+    //                 sh "docker login -u mlogu6 -p ${dockerPassword}"
+    //             }
+    //             sh 'docker push mlogu6/myweb:${TAG}'
+    //         }
+    //     }
 
-        stage('Nexus Image Push') {
-            steps {
-                sh "docker login -u admin -p admin 3.111.188.115:8087"
-                sh "docker tag mlogu6/myweb:${TAG} 3.111.188.115:8087/myproject:1.0.0"
-                sh "docker push 3.111.188.115:8087/myproject:1.0.0"
-            }
-        }
+    //     stage('Nexus Image Push') {
+    //         steps {
+    //             sh "docker login -u admin -p admin 3.111.188.115:8087"
+    //             sh "docker tag mlogu6/myweb:${TAG} 3.111.188.115:8087/myproject:1.0.0"
+    //             sh "docker push 3.111.188.115:8087/myproject:1.0.0"
+    //         }
+    //     }
 
-        stage('Delete Images & Container') {
-            steps {
-                sh 'docker image prune --all --force && docker rm -f myproject'
-                }
-            }
+    //     stage('Delete Images & Container') {
+    //         steps {
+    //             sh 'docker image prune --all --force && docker rm -f myproject'
+    //             }
+    //         }
 
-        stage (Deployment) {
-            steps {
-                sh 'docker run -d -p 8091:8080 --name myproject mlogu6/myweb:${TAG}'
-            }
-        }
+    //     stage (Deployment) {
+    //         steps {
+    //             sh 'docker run -d -p 8091:8080 --name myproject mlogu6/myweb:${TAG}'
+    //         }
+    //     }
 
 	//     stage('Ansible Deployment') {
     //         steps {
