@@ -58,13 +58,13 @@ pipeline {
             }
         }
 
-    //     stage('Nexus Image Push') {
-    //         steps {
-    //             sh "docker login -u admin -p admin 3.111.188.115:8087"
-    //             sh "docker tag mohammed0303/myweb:${TAG} 3.111.188.115:8087/myproject:1.0.0"
-    //             sh "docker push 3.111.188.115:8087/myproject:1.0.0"
-    //         }
-    //     }
+        stage('Nexus Image Push') {
+            steps {
+                sh "docker login -u admin -p admin 65.0.55.17:8083"
+                sh "docker tag mohammed0303/myweb:${TAG} 65.0.55.17:8083/myproject:1.0.0"
+                sh "docker push 65.0.55.17:8083/myproject:1.0.0"
+            }
+        }
 
         stage('Delete Images & Container') {
             steps {
