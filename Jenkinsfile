@@ -29,39 +29,39 @@ pipeline {
       	}
       }
 	    
-	stage('SonarQube Analysis') {
-        // generate a token in sonarqube console and add it in the jenkins credentials
+	// stage('SonarQube Analysis') {
+    //     // generate a token in sonarqube console and add it in the jenkins credentials
+    //         steps {
+    //             script {
+    //                 def mvnHome = tool name: 'maven3', type: 'maven'
+    //                 withSonarQubeEnv('sonar') {
+    //                     sh "${mvnHome}/bin/mvn sonar:sonar"
+    //                 }
+    //             }
+    //         }
+    //     }
+
+        stage('Build Docker Image') {
             steps {
-                script {
-                    def mvnHome = tool name: 'maven3', type: 'maven'
-                    withSonarQubeEnv('sonar') {
-                        sh "${mvnHome}/bin/mvn sonar:sonar"
-                    }
-                }
+                // install docker in the jenkins server
+                // execute this command to give the permission to build the image "chmod 777 /var/run/docker.sock"
+                sh 'docker build -t mohammed0303/myweb:${TAG} .'
             }
         }
 
-    //     stage('Build Docker Image') {
-    //         steps {
-    //             // install docker in the jenkins server
-    //             // execute this command to give the permission to build the image "chmod 777 /var/run/docker.sock"
-    //             sh 'docker build -t mlogu6/myweb:${TAG} .'
-    //         }
-    //     }
-
-    //     stage('Docker Image Push') {
-    //         steps {
-    //             withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
-    //                 sh "docker login -u mlogu6 -p ${dockerPassword}"
-    //             }
-    //             sh 'docker push mlogu6/myweb:${TAG}'
-    //         }
-    //     }
+        stage('Docker Image Push') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
+                    sh "docker login -u mohammed0303 -p ${dockerPassword}"
+                }
+                sh 'docker push mohammed0303/myweb:${TAG}'
+            }
+        }
 
     //     stage('Nexus Image Push') {
     //         steps {
     //             sh "docker login -u admin -p admin 3.111.188.115:8087"
-    //             sh "docker tag mlogu6/myweb:${TAG} 3.111.188.115:8087/myproject:1.0.0"
+    //             sh "docker tag mohammed0303/myweb:${TAG} 3.111.188.115:8087/myproject:1.0.0"
     //             sh "docker push 3.111.188.115:8087/myproject:1.0.0"
     //         }
     //     }
