@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         TAG = "v0.${env.BUILD_NUMBER}"
-        S3_BUCKET = "myproject-artifacts"
+        S3_BUCKET = "docker1109"
     }
     
     stages {
@@ -17,17 +17,17 @@ pipeline {
             }
         }
 	    
-    // stage('Upload to S3') {
-    //     // create a iam role and add it to the jenkins server to access the aws
-    //   steps {
-	// sh '''
-    //       AWS_ACCESS_KEY_ID='aws-credentials'
-    //       AWS_SECRET_ACCESS_KEY='aws-credentials'
-    //       AWS_DEFAULT_REGION=ap-south-1
-    //       aws s3 cp target/*.war s3://${S3_BUCKET}/newapp-${TAG}.war
-    //         '''
-    //   	}
-    //   }
+    stage('Upload to S3') {
+        // create a iam role and add it to the jenkins server to access the aws
+      steps {
+	sh '''
+          AWS_ACCESS_KEY_ID='aws-credentials'
+          AWS_SECRET_ACCESS_KEY='aws-credentials'
+          AWS_DEFAULT_REGION=ap-south-1
+          aws s3 cp target/*.war s3://${S3_BUCKET}/newapp-${TAG}.war
+            '''
+      	}
+      }
 	    
 	// stage('SonarQube Analysis') {
     //     // generate a token in sonarqube console and add it in the jenkins credentials
