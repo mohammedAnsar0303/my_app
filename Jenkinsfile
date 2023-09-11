@@ -29,17 +29,17 @@ pipeline {
       	}
       }
 	    
-	// stage('SonarQube Analysis') {
-    //     // generate a token in sonarqube console and add it in the jenkins credentials
-    //         steps {
-    //             script {
-    //                 def mvnHome = tool name: 'maven3', type: 'maven'
-    //                 withSonarQubeEnv('sonar') {
-    //                     sh "${mvnHome}/bin/mvn sonar:sonar"
-    //                 }
-    //             }
-    //         }
-    //     }
+	stage('SonarQube Analysis') {
+        // generate a token in sonarqube console and add it in the jenkins credentials
+            steps {
+                script {
+                    def mvnHome = tool name: 'maven3', type: 'maven'
+                    withSonarQubeEnv('sonar') {
+                        sh "${mvnHome}/bin/mvn sonar:sonar"
+                    }
+                }
+            }
+        }
 
     //     stage('Build Docker Image') {
     //         steps {
